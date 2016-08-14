@@ -26,4 +26,5 @@ dependencies {
     compile 'com.android.support:design:23.3.0'
     compile 'com.squareup.retrofit2:retrofit:2.0.2'
     compile 'com.squareup.retrofit2:converter-gson:2.0.2'
+    compile 'joda-time:joda-time:2.9.4'
 }
