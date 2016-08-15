@@ -77,14 +77,14 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="Your flight arrives ______ Would you like to have a Skurt waiting for you upon arrival?"
-            android:id="@+id/textView2" />
+            android:id="@+id/confirmationTextView" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="New Button"
-            android:id="@+id/button"
-            android:layout_below="@+id/textView2"
+            android:id="@+id/noButton"
+            android:layout_below="@+id/confirmationTextView"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
 
@@ -92,9 +92,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="New Button"
-            android:id="@+id/button2"
-            android:layout_below="@+id/textView2"
+            android:id="@+id/yesButton"
+            android:layout_below="@+id/confirmationTextView"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
     </RelativeLayout>
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:layout_above="@+id/search_layout"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"/>
 </RelativeLayout>
