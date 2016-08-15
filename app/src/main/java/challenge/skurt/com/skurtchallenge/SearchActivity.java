@@ -9,9 +9,11 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -31,11 +33,9 @@ public class SearchActivity extends AppCompatActivity {
     private static final int SEARCH_SLIDE_ANIMATION_DISTANCE = 2000;
 
     private EditText flightNumberEditText;
-
-
-    //change this
     private TextView bottomTextView;
     private RelativeLayout searchLayout;
+    private RelativeLayout flightInfoSkurtLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,45 +47,21 @@ public class SearchActivity extends AppCompatActivity {
         flightNumberEditText = (EditText) findViewById(R.id.flightNumberEditText);
         bottomTextView = (TextView) findViewById(R.id.bottomTextView);
         searchLayout = (RelativeLayout) findViewById(R.id.search_layout);
+        flightInfoSkurtLayout = (RelativeLayout) findViewById(R.id.flightInfoSkurtLayout);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        flightNumberEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public void onClick(View view) {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_GO) {
+                    String flightNumberText = flightNumberEditText.getText().toString();
 
-                String flightNumberText = flightNumberEditText.getText().toString();
-                Snackbar.make(view,"Searching for flight number" +  flightNumberText , Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                    FlightStatsAsyncTask flightStatsAsyncTask = new FlightStatsAsyncTask(getApplicationContext(), SearchActivity.this, flightNumberText);
+                    flightStatsAsyncTask.execute();
 
-
-
-                FlightStatsAsyncTask flightStatsAsyncTask = new FlightStatsAsyncTask(getApplicationContext(), SearchActivity.this, flightNumberText);
-                flightStatsAsyncTask.execute();
-
+                }
+                return false;
             }
         });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_search, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     private class FlightStatsAsyncTask extends AsyncTask<Void, Void, String> {
@@ -154,6 +130,8 @@ public class SearchActivity extends AppCompatActivity {
                 toast.show();
 
                 searchActivity.searchLayout.animate().translationY(-1 * SEARCH_SLIDE_ANIMATION_DISTANCE);
+                searchActivity.flightInfoSkurtLayout.setVisibility(View.VISIBLE);
+                searchActivity.flightInfoSkurtLayout.animate().translationY(-400);
             }
         }
     }
