@@ -136,7 +136,7 @@ public class SearchActivity extends AppCompatActivity {
             if (this.exceptionOccurred) {
                 final Toast toast = Toast.makeText(this.context,
                         result,
-                        Toast.LENGTH_SHORT);
+                        Toast.LENGTH_LONG);
 
                 toast.show();
             } else {

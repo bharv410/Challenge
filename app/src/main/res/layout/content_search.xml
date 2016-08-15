@@ -49,6 +49,7 @@
             android:id="@+id/flightNumberEditText"
             android:imeOptions="actionGo"
             android:singleLine="true"
+            android:gravity="center"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true" />
 
@@ -84,6 +85,8 @@
             android:layout_height="wrap_content"
             android:text="@string/no_button_text"
             android:id="@+id/noButton"
+            android:textColor="@android:color/white"
+            android:background="@color/colorPrimary"
             android:layout_below="@+id/confirmationTextView"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
@@ -95,6 +98,8 @@
             android:layout_height="wrap_content"
             android:text="@string/yes_button_text"
             android:id="@+id/yesButton"
+            android:textColor="@android:color/white"
+            android:background="@color/colorPrimary"
             android:layout_below="@+id/confirmationTextView"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
