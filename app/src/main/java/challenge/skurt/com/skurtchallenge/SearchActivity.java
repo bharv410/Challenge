@@ -119,7 +119,7 @@ public class SearchActivity extends AppCompatActivity {
 
                 String timestamp = flightStats.flightStatus.operationalTimes.publishedArrival.dateUtc;
                 DateTime dateTime = ISODateTimeFormat.dateTimeParser().parseDateTime(timestamp);
-                DateTimeFormatter dtf = DateTimeFormat.forPattern("MM/dd/yyyy HH:mm:ss");
+                DateTimeFormatter dtf = DateTimeFormat.forPattern("MM/dd/yyyy HH:mm:ssa");
 
                 return getString(R.string.flight_info, dtf.print(dateTime));
             }catch (IOException ioException){
