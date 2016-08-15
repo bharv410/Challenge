@@ -112,6 +112,10 @@ public class SearchActivity extends AppCompatActivity {
 
                 FlightStatusResponse flightStats = flightStatsResponse.body();
 
+                if(flightStats.flightStatus == null){
+                    return "Flight not found";
+                }
+
                 String timestamp = flightStats.flightStatus.operationalTimes.publishedArrival.dateUtc;
 
                 DateTime dateTime = ISODateTimeFormat.dateTimeParser().parseDateTime(timestamp);
