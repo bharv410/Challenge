@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,11 +28,14 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class SearchActivity extends AppCompatActivity {
+    private static final int SEARCH_SLIDE_ANIMATION_DISTANCE = 2000;
+
     private EditText flightNumberEditText;
 
 
     //change this
-    public TextView bottomTextView;
+    private TextView bottomTextView;
+    private RelativeLayout searchLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +46,7 @@ public class SearchActivity extends AppCompatActivity {
 
         flightNumberEditText = (EditText) findViewById(R.id.flightNumberEditText);
         bottomTextView = (TextView) findViewById(R.id.bottomTextView);
+        searchLayout = (RelativeLayout) findViewById(R.id.search_layout);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -88,7 +93,6 @@ public class SearchActivity extends AppCompatActivity {
         private final SearchActivity searchActivity;
         private final String flightNumberString;
         private boolean exceptionOccurred = false;
-        private Exception exception = null;
 
         public FlightStatsAsyncTask(final Context context, final SearchActivity searchActivity,
                                     final String flightNumberString) {
@@ -112,7 +116,8 @@ public class SearchActivity extends AppCompatActivity {
 
                 FlightStatusResponse flightStats = flightStatsResponse.body();
 
-                if(flightStats.flightStatus == null){
+                if(flightStats == null || flightStats.flightStatus == null){
+                    this.exceptionOccurred = true;
                     return "Flight not found";
                 }
 
@@ -121,7 +126,7 @@ public class SearchActivity extends AppCompatActivity {
                 DateTime dateTime = ISODateTimeFormat.dateTimeParser().parseDateTime(timestamp);
 
                 String dateString =  "day " + dateTime.dayOfMonth().getAsText() + " mont " + dateTime.monthOfYear().getAsText()+ " year" + dateTime.year().getAsText();
-                System.out.println("benmark Flight arrival = " + dateString);
+
                 return dateString;
             }catch (IOException ioException){
 
@@ -136,13 +141,19 @@ public class SearchActivity extends AppCompatActivity {
 
             if (this.exceptionOccurred) {
                 final Toast toast = Toast.makeText(this.context,
-                        "Sorry. Please try again when" + " you have an internet connection",
+                        "Could not find flight number",
                         Toast.LENGTH_SHORT);
 
                 toast.show();
             } else {
 
-                searchActivity.bottomTextView.setText(result);
+
+                final Toast toast = Toast.makeText(this.context, result,
+                        Toast.LENGTH_SHORT);
+
+                toast.show();
+
+                searchActivity.searchLayout.animate().translationY(-1 * SEARCH_SLIDE_ANIMATION_DISTANCE);
             }
         }
     }

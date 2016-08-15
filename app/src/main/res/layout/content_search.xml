@@ -12,36 +12,52 @@
     tools:context="challenge.skurt.com.skurtchallenge.SearchActivity"
     tools:showIn="@layout/activity_search">
 
-    <TextView
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        android:gravity="center"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:id="@+id/imageView"
+        android:src="@drawable/skurtlogo"
         android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/textView" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:ems="10"
-        android:hint="@string/flight_number_hint"
-        android:id="@+id/flightNumberEditText"
-        android:layout_below="@+id/textView"
         android:layout_centerHorizontal="true" />
 
-    <TextView
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/search_layout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Lorem ipsum bladdie bla blah blah"
-        android:id="@+id/bottomTextView"
-        android:layout_below="@+id/flightNumberEditText"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:animateLayoutChanges="true">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hello World!"
+            android:gravity="center"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:id="@+id/textView"
+            android:layout_above="@+id/flightNumberEditText" />
 
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:hint="@string/flight_number_hint"
+            android:id="@+id/flightNumberEditText"
+            android:layout_centerVertical="true"
+            android:layout_alignRight="@+id/bottomTextView"
+            android:layout_alignEnd="@+id/bottomTextView" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Lorem ipsum bladdie bla blah blah"
+            android:id="@+id/bottomTextView"
+            android:layout_below="@+id/flightNumberEditText"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
 </RelativeLayout>
