@@ -82,7 +82,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="New Button"
+            android:text="@string/no_button_text"
             android:id="@+id/noButton"
             android:layout_below="@+id/confirmationTextView"
             android:layout_alignParentLeft="true"
@@ -91,7 +91,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="New Button"
+            android:text="@string/yes_button_text"
             android:id="@+id/yesButton"
             android:layout_below="@+id/confirmationTextView"
             android:layout_alignParentRight="true"

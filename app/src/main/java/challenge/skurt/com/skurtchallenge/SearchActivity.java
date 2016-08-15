@@ -1,18 +1,14 @@
 package challenge.skurt.com.skurtchallenge;
 
-import android.app.Activity;
+
+import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,7 +28,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class SearchActivity extends AppCompatActivity {
-    private static final int SEARCH_SLIDE_ANIMATION_DISTANCE = 2000;
+    private static final int SEARCH_SLIDE_ANIMATION_DISTANCE = -2000;
+    private static final int CONFIRMATION_SLIDE_ANIMATION_DISTANCE = -400;
 
     private EditText flightNumberEditText;
     private RelativeLayout searchLayout;
@@ -46,46 +43,38 @@ public class SearchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
 
-        flightNumberEditText = (EditText) findViewById(R.id.flightNumberEditText);
-        searchLayout = (RelativeLayout) findViewById(R.id.search_layout);
-        flightInfoSkurtLayout = (RelativeLayout) findViewById(R.id.flightInfoSkurtLayout);
-        confirmationTextView = (TextView) findViewById(R.id.confirmationTextView);
-        noButton = (Button) findViewById(R.id.noButton);
-        yesButton = (Button) findViewById(R.id.yesButton);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        this.flightNumberEditText = (EditText) findViewById(R.id.flightNumberEditText);
+        this.searchLayout = (RelativeLayout) findViewById(R.id.search_layout);
+        this.flightInfoSkurtLayout = (RelativeLayout) findViewById(R.id.flightInfoSkurtLayout);
+        this.confirmationTextView = (TextView) findViewById(R.id.confirmationTextView);
+        this.noButton = (Button) findViewById(R.id.noButton);
+        this.yesButton = (Button) findViewById(R.id.yesButton);
+        this.progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
-        noButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(SearchActivity.this, "no", Toast.LENGTH_SHORT).show();
-                
-            }
-        });
 
-        yesButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(SearchActivity.this, "yes", Toast.LENGTH_SHORT).show();
-            }
-        });
-        flightNumberEditText.setOnEditorActionListener(new OnDoneClickListener(this));
+        OnNoClickListener onNoClickListener = new OnNoClickListener(this);
+        this.noButton.setOnClickListener(onNoClickListener);
+
+        OnYesClickListener onYesClickListener = new OnYesClickListener(this);
+        this.yesButton.setOnClickListener(onYesClickListener);
+
+        OnDoneClickListener onDoneClickListener = new OnDoneClickListener(this);
+        this.flightNumberEditText.setOnEditorActionListener(onDoneClickListener);
     }
 
-    private void goToConfirmation(String dateString){
-        searchLayout.animate().translationY(-1 * SEARCH_SLIDE_ANIMATION_DISTANCE);
-        flightInfoSkurtLayout.setVisibility(View.VISIBLE);
-        flightInfoSkurtLayout.animate().translationY(-400);
-
-
-        String confirmationString = "Your flight arrives " + dateString + ". Would you like to have a Skurt waiting for you upon arrival?";
-        confirmationTextView.setText(confirmationString);
+    private void goToConfirmation(String confirmationString){
+        this.searchLayout.animate().translationY(SEARCH_SLIDE_ANIMATION_DISTANCE);
+        this.flightNumberEditText.setText("");
+        this.flightInfoSkurtLayout.setVisibility(View.VISIBLE);
+        this.flightInfoSkurtLayout.animate().translationY(CONFIRMATION_SLIDE_ANIMATION_DISTANCE);
+        this.confirmationTextView.setText(confirmationString);
     }
 
     private void goBackToSearch(){
-
+        this.searchLayout.animate().translationY(0);
+        this.flightInfoSkurtLayout.setVisibility(View.GONE);
+        this.flightInfoSkurtLayout.animate().translationY(0);
     }
 
     private class FlightStatsAsyncTask extends AsyncTask<Void, Void, String> {
@@ -124,21 +113,23 @@ public class SearchActivity extends AppCompatActivity {
 
                 if(flightStats == null || flightStats.flightStatus == null){
                     this.exceptionOccurred = true;
-                    return "Flight not found";
+                    return getString(R.string.flight_not_found);
                 }
 
                 String timestamp = flightStats.flightStatus.operationalTimes.publishedArrival.dateUtc;
+
 
                 DateTime dateTime = ISODateTimeFormat.dateTimeParser().parseDateTime(timestamp);
 
                 String dateString =  "day " + dateTime.dayOfMonth().getAsText() + " mont " + dateTime.monthOfYear().getAsText()+ " year" + dateTime.year().getAsText();
 
-                return dateString;
+                String confirmationString = "Your flight arrives " + dateString + ". Would you like to have a Skurt waiting for you upon arrival?";
+
+                return confirmationString;
             }catch (IOException ioException){
-
+                this.exceptionOccurred = true;
+                return getString(R.string.connectivity_issues);
             }
-
-            return null;
         }
 
         @Override
@@ -149,15 +140,68 @@ public class SearchActivity extends AppCompatActivity {
 
             if (this.exceptionOccurred) {
                 final Toast toast = Toast.makeText(this.context,
-                        "Could not find flight number",
+                        result,
                         Toast.LENGTH_SHORT);
 
                 toast.show();
             } else {
-                searchActivity.goToConfirmation(result);
+                this.searchActivity.goToConfirmation(result);
             }
         }
     }
+
+    private class OnNoClickListener implements View.OnClickListener{
+        private final SearchActivity searchActivity;
+        public OnNoClickListener(SearchActivity searchActivity){
+            this.searchActivity = searchActivity;
+
+        }
+
+        @Override
+        public void onClick(View v) {
+            this.searchActivity.goBackToSearch();
+        }
+    }
+
+    private class OnYesClickListener implements View.OnClickListener{
+        private final SearchActivity searchActivity;
+        public OnYesClickListener(SearchActivity searchActivity){
+            this.searchActivity = searchActivity;
+
+        }
+        private void goBackToSearch(){
+            this.searchActivity.goBackToSearch();
+        }
+
+        @Override
+        public void onClick(View v) {
+            AlertDialog.Builder builder1 = new AlertDialog.Builder(searchActivity);
+            builder1.setMessage("Write your message here.");
+            builder1.setCancelable(true);
+
+            builder1.setPositiveButton(
+                    "Yes",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                            goBackToSearch();
+                        }
+                    });
+
+            builder1.setNegativeButton(
+                    "No",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                            goBackToSearch();
+                        }
+                    });
+
+            AlertDialog alert11 = builder1.create();
+            alert11.show();
+        }
+    }
+
     private class OnDoneClickListener implements TextView.OnEditorActionListener{
         private final SearchActivity searchActivity;
         public OnDoneClickListener(SearchActivity searchActivity){
