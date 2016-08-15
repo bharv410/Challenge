@@ -170,12 +170,11 @@ public class SearchActivity extends AppCompatActivity {
 
         @Override
         public void onClick(View v) {
-            AlertDialog.Builder builder1 = new AlertDialog.Builder(searchActivity);
-            builder1.setMessage("Write your message here.");
-            builder1.setCancelable(true);
-
-            builder1.setPositiveButton(
-                    "Yes",
+            AlertDialog.Builder alertBuilder = new AlertDialog.Builder(searchActivity);
+            alertBuilder.setMessage(getString(R.string.confirm_skurt));
+            alertBuilder.setCancelable(false);
+            alertBuilder.setPositiveButton(
+                    getString(R.string.okay_thanks),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.cancel();
@@ -183,17 +182,8 @@ public class SearchActivity extends AppCompatActivity {
                         }
                     });
 
-            builder1.setNegativeButton(
-                    "No",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
-                            goBackToSearch();
-                        }
-                    });
-
-            AlertDialog alert11 = builder1.create();
-            alert11.show();
+            AlertDialog alertDialog = alertBuilder.create();
+            alertDialog.show();
         }
     }
 

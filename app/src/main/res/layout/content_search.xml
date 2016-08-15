@@ -47,18 +47,18 @@
             android:ems="10"
             android:hint="@string/flight_number_hint"
             android:id="@+id/flightNumberEditText"
-            android:layout_centerVertical="true"
             android:imeOptions="actionGo"
             android:singleLine="true"
-            android:layout_alignRight="@+id/bottomTextView"
-            android:layout_alignEnd="@+id/bottomTextView" />
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Lorem ipsum bladdie bla blah blah"
+            android:text="@string/hint_for_entry"
             android:id="@+id/bottomTextView"
+            android:paddingTop="@dimen/activity_vertical_margin"
             android:layout_below="@+id/flightNumberEditText"
             android:layout_centerHorizontal="true" />
     </RelativeLayout>
@@ -69,14 +69,14 @@
         android:layout_height="200dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:visibility="visible">
+        android:visibility="gone">
 
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Your flight arrives ______ Would you like to have a Skurt waiting for you upon arrival?"
+            android:text=""
             android:id="@+id/confirmationTextView" />
 
         <Button

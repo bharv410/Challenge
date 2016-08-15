@@ -6,5 +6,8 @@
     <string name="flight_not_found">Flight not found</string>
     <string name="no_button_text">No, \n take me back to search</string>
     <string name="yes_button_text">Yes, thank you</string>
-    <string name="flight_info">Your flight arrives at %1$s! \n Would you like to have a Skurt at the airport waiting for you upon arrival?</string>
+    <string name="flight_info">Your flight arrives at %1$s. \n Would you like to have a Skurt at the airport waiting for you upon arrival?</string>
+    <string name="hint_for_entry"> Enter your flight number and we will have a Skurt waiting for you as soon as you get off of your flight!</string>
+    <string name="confirm_skurt">Great! Your Skurt will be waiting for you when you arrive.</string>
+    <string name="okay_thanks">Okay, thanks!</string>
 </resources>
