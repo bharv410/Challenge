@@ -11,6 +11,6 @@ public interface FlightStatsService {
     Call<ResponseBody> getFlightStatsRaw(@Path("flightNumber") int flightNumber);
 
     @GET("flex/flightstatus/rest/v2/json/flight/status/{flightNumber}?appId=91b929e6&appKey=2eebba75c50ce13c31b9ef0b331fb93a")
-    Call<FlightStatusResponse> getFlightStats(@Path("flightNumber") int flightNumber);
+    Call<FlightStatusResponse> getFlightStats(@Path("flightNumber") String flightNumber);
 
 }
