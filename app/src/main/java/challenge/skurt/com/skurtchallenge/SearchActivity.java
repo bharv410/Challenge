@@ -18,6 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 
 import java.io.IOException;
@@ -104,11 +106,10 @@ public class SearchActivity extends AppCompatActivity {
                     .build();
 
             FlightStatsService flightStatsService = retrofit.create(FlightStatsService.class);
-
             Call<FlightStatusResponse> flightStatsCall = flightStatsService.getFlightStats(this.flightNumberString);
+
             try {
                 Response<FlightStatusResponse> flightStatsResponse = flightStatsCall.execute();
-
                 FlightStatusResponse flightStats = flightStatsResponse.body();
 
                 if(flightStats == null || flightStats.flightStatus == null){
@@ -117,15 +118,10 @@ public class SearchActivity extends AppCompatActivity {
                 }
 
                 String timestamp = flightStats.flightStatus.operationalTimes.publishedArrival.dateUtc;
-
-
                 DateTime dateTime = ISODateTimeFormat.dateTimeParser().parseDateTime(timestamp);
+                DateTimeFormatter dtf = DateTimeFormat.forPattern("MM/dd/yyyy HH:mm:ss");
 
-                String dateString =  "day " + dateTime.dayOfMonth().getAsText() + " mont " + dateTime.monthOfYear().getAsText()+ " year" + dateTime.year().getAsText();
-
-                String confirmationString = "Your flight arrives " + dateString + ". Would you like to have a Skurt waiting for you upon arrival?";
-
-                return confirmationString;
+                return getString(R.string.flight_info, dtf.print(dateTime));
             }catch (IOException ioException){
                 this.exceptionOccurred = true;
                 return getString(R.string.connectivity_issues);
@@ -135,7 +131,6 @@ public class SearchActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(final String result) {
             super.onPostExecute(result);
-
             this.searchActivity.progressBar.setVisibility(View.GONE);
 
             if (this.exceptionOccurred) {
