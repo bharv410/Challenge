@@ -78,7 +78,8 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text=""
-            android:id="@+id/confirmationTextView" />
+            android:id="@+id/confirmationTextView"
+            android:paddingBottom="20dp"/>
 
         <Button
             android:layout_width="wrap_content"
